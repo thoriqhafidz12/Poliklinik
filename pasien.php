@@ -1,5 +1,4 @@
 <?php 
- $page = "Pasien";
 
 // Memeriksa apakah pengguna sudah login, jika tidak, arahkan kembali ke halaman login
 if(!isset($_SESSION["username"])){

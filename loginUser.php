@@ -1,5 +1,4 @@
 <?php
-$page = "Login";
 require('koneksi.php');
 
 if ($mysqli->connect_error) {

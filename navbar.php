@@ -1,5 +1,4 @@
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-center">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
       <img src="medicalife.png"  width="100" height="40" alt="">
@@ -31,6 +30,11 @@
             <li>
               <a class="dropdown-item" href="index.php?page=pasien">
                 Pasien
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="index.php?page=obat">
+                Obat
               </a>
             </li>
           </ul>

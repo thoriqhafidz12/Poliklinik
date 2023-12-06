@@ -1,5 +1,4 @@
 <?php
-$page = "Register";
 
 require ('koneksi.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
