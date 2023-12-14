@@ -33,22 +33,22 @@ if(!isset($_SESSION["username"])){
         <label class="form-label fw-bold">
             Nama
         </label>
-        <input type="text" class="form-control my-2" name="nama" value="<?php echo $nama ?>">
+        <input type="text" class="form-control my-2" name="nama" value="<?php echo $nama ?>" required>
         <label class="form-label fw-bold">
             Alamat
         </label>
-        <input type="text" class="form-control my-2" name="alamat" value="<?php echo $alamat ?>">
+        <input type="text" class="form-control my-2" name="alamat" value="<?php echo $alamat ?>" requied>
         <label class="form-label fw-bold">
         No HP
         </label>
-        <input type="text" class="form-control my-2" name="no_hp" value="<?php echo $no_hp ?>">
+        <input type="text" class="form-control my-2" name="no_hp" value="<?php echo $no_hp ?>" required>
         <button type="submit" class="btn btn-primary rounded-pill px-3" name="simpan">Simpan</button>
   </div>
 </form>
 
 <!-- Table-->
-<div class="table-responsive">
-    <table class="table table-hover">
+<div class="table-responsive my-4">
+    <table class="table table-hover"  id="myTable">
         <!--thead atau baris judul-->
         <thead>
             <tr>
@@ -74,7 +74,7 @@ if(!isset($_SESSION["username"])){
                     <th scope="row"><?php echo $no++ ?></th>
                     <td><?php echo $data['nama'] ?></td>
                     <td><?php echo $data['alamat'] ?></td>
-                    <td><?php echo "0".$data['no_hp'] ?></td>
+                    <td><?php echo $data['no_hp'] ?></td>
                     <td>
                         <a class="btn btn-success rounded-pill px-3" 
                         href="index.php?page=pasien&id=<?php echo $data['id'] ?>">Ubah

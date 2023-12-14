@@ -1,4 +1,3 @@
-
 <?php 
 
 // Memeriksa apakah pengguna sudah login, jika tidak, arahkan kembali ke halaman login
@@ -7,96 +6,128 @@ if(!isset($_SESSION["username"])){
     exit;
 }
 ?>
-
-<div class="container text-center">
-    <div class="row justify-content-center">
-        <div class="col-4 card" style="width: 18rem;">
-            <table class="table table-responsive text-center">
-                <?php
-                include ('koneksi.php');
-                date_default_timezone_set("Asia/Jakarta");
-                $result = mysqli_query($mysqli, "SELECT pr.*,d.nama as 'nama_dokter', p.nama as 'nama_pasien' FROM periksa pr LEFT JOIN dokter d ON (pr.id_dokter=d.id) LEFT JOIN pasien p ON (pr.id_pasien=p.id) WHERE pr.id='" . $_GET['id'] . "'");
-                $no = 1;
-                while ($data = mysqli_fetch_array($result)) {
-                ?>
-                    <tr><td><?php echo $data['nama_pasien'] ?></td></tr>
-                    <tr><td><?php echo $data['nama_dokter'] ?></td></tr>
-                    <tr><td><?php echo date('d-M-Y H:i:s', strtotime ($data['tgl_periksa']))  ?></td></tr>
-                    <tr><td><?php echo $data['catatan'] ?></td></tr>
-                    <tr></tr>
-                <?php
-                }
-                ?>
-            </table>
-        </div>
-    </div>
-</div>
-
-
-
 <form action="" onsubmit="return(validate());" method="post">
-    <!-- AMBIL DATA UNTUK UBAH -->
-        <?php
-        include ('koneksi.php');
-        $id_periksa = '';
-        $id_obat = '';
-        if (isset($_GET['id'])) {
-            $ambil = mysqli_query($mysqli, 
-            "SELECT * FROM detail_periksa 
-            WHERE id='" . $_GET['id'] . "'");
-            while ($row = mysqli_fetch_array($ambil)) {
-                $id_periksa = $row['id_periksa'];
-                $id_obat = $row['id_obat'];
+        <!-- AMBIL DATA UNTUK UBAH -->
+            <?php
+            include ('koneksi.php');
+            $id_pasien = '';
+            $id_dokter = '';
+            $tgl_periksa = '';
+            $catatan = '';
+            $biaya_periksa = '';
+            if (isset($_GET['id'])) {
+                $ambil = mysqli_query($mysqli, 
+                "SELECT * FROM periksa 
+                WHERE id='" . $_GET['id'] . "'");
+                while ($row = mysqli_fetch_array($ambil)) {
+                    $id_pasien = $row['id_pasien'];
+                    $id_dokter = $row['id_dokter'];
+                    $tgl_periksa = $row['tgl_periksa'];
+                    $catatan = $row['catatan'];
+                    $biaya_periksa = $row['biaya_periksa'];
+                }
+            ?>
+                <input type=hidden name="id" value="<?php echo
+                $_GET['id'] ?>">
+            <?php
             }
-        ?>
-            <input type=hidden name="id" value="<?php echo
-            $_GET['id'] ?>">
-        <?php
-        }
-        ?>
+            ?>
+        <!-- SELECT PASIEN -->
+        <label class="fw-bold">Pasien</label>
+        <select class="form-control my-2" name="id_pasien">
+           <?php
+           include ('koneksi.php');
+           $selected = '';
+           $periksa = mysqli_query($mysqli, "SELECT * FROM pasien");
+           while ($data = mysqli_fetch_array($periksa)) {
+               if ($data['id'] == $id_pasien) {
+                   $selected = 'selected="selected"';
+               } else {
+                   $selected = '';
+               }
+           ?>
+               <option value="<?php echo $data['id'] ?>"  <?php echo $selected?>> <?php echo $data['nama'] ?></option>
+           <?php
+           }
+           ?>
+        </select>
 
-    <!-- SELECT OBAT -->
-    <input type="text" name="id_periksa" value="<?php echo $_GET['id'] ?>" hidden>
-    <label class="fw-bold">Obat</label>
-    <select class="form-control my-2" name="id_obat">
-        <?php
-        include ('koneksi.php');
-        $selected = '';
-        $obat = mysqli_query($mysqli, "SELECT * FROM obat");
-        while ($data = mysqli_fetch_array($obat)) {
-            if ($data['id'] == $id_obat) {
-                $selected = 'selected="selected"';
-            } else {
-                $selected = '';
-            }
-            $total = 150000 + $data['harga'] ;
-        ?>
-            <option value="<?php echo $data['id'] ?>"  <?php echo $selected ?>><?php echo $data['nama_obat'] ?> | <?php echo $data['kemasan'] ?> | Rp. <?php echo $data['harga'] ?> | Rp. <?= $total; ?></option>
-        <?php
-        }
-        ?>
-    </select>
+        <!-- SELECT DOKTER -->
+       <label class="fw-bold">Dokter</label>
+       <select class="form-control my-2" name="id_dokter">
+           <?php
+           include ('koneksi.php');
+           $selected = '';
+           $dokter = mysqli_query($mysqli, "SELECT * FROM dokter");
+           while ($data = mysqli_fetch_array($dokter)) {
+               if ($data['id'] == $id_dokter) {
+                   $selected = 'selected="selected"';
+               } else {
+                   $selected = '';
+               }
+           ?>
+               <option value="<?php echo $data['id'] ?>"  <?php echo $selected ?>><?php echo $data['nama'] ?></option>
+           <?php
+           }
+           ?>
+       </select>
+       
+        <!-- COLOM INSERT DATETIME DAN TEXT -->
+       <label class="fw-bold">Tanggal Periksa</label>
+       <input type="datetime-local" name="tgl_periksa" value="<?php echo $tgl_periksa ?>" class="form-control my-2"  required>
+       
+       <label class="fw-bold">Catatan</label>
+       <input type="text" class="form-control my-2" name="catatan"  value="<?php echo $catatan ?>"> 
 
-    <button class="btn btn-primary" type="submit" name="simpan" >Submit</button>
-</form>
+       <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-4 card" style="width: 30rem;">
+                    <table class="table table-responsive text-center">
+                    <?php 
+                    include "koneksi.php";
+                    $total = 150000;
+                    echo '<tr><td>Biaya Periksa : Rp. '.number_format($total,2,',','.').'</tr></td>';
+                    $result = mysqli_query($mysqli,"SELECT dp.*, o.harga as 'harga', o.nama_obat as 'nama_obat' FROM detail_periksa dp
+                                                        LEFT JOIN obat o 
+                                                        ON (dp.id_obat=o.id) 
+                                                        WHERE dp.id_periksa='" . $_GET['id'] . "'");
+                        while ($data = mysqli_fetch_array($result)) {
+                        ?>
 
-<!-- FUNGSI CRUD -->
-<?php
+                            <?php $total = $total + $data['harga']; ?>
+                            
+                            <tr><td><?= $data['nama_obat']; ?> : Rp. <?= number_format($data['harga'],2,',','.'); ?></td></tr>
+                        <?php
+                        }
+                        ?>
+                    </table>
+                    Total:<input type="text" class="form-control text-center" value="<?= $total?>" name="biaya_periksa">
+                </div>
+            </div>
+        </div>
+
+       
+
+       <button class="btn btn-primary" type="submit" name="simpan" >Submit</button>
+    </form>
+
+    <?php
 include ('koneksi.php');
 if (isset($_POST['simpan'])) {
-    $id_periksa = $_POST['id_periksa'];
-    $id_obat = $_POST['id_obat'];
-    $total = $_POST['biaya_periksa'];
-    if (isset($_POST['id_periksa'])) {
-        $sql = "INSERT INTO detail_periksa (id_periksa,id_obat) VALUES ('$id_periksa','$id_obat')";
+    $id_pasien = $_POST['id_pasien'];
+    $id_dokter = $_POST['id_dokter'];
+    $tgl_periksa = $_POST['tgl_periksa'];
+    $catatan = $_POST['catatan'];
+    $biaya_periksa = $_POST['biaya_periksa'];
+    if (isset($_POST['id'])) {
+        $sql = "UPDATE periksa SET id_pasien='$id_pasien',id_dokter='$id_dokter',tgl_periksa='$tgl_periksa',catatan = '$catatan', biaya_periksa='$biaya_periksa' WHERE id = ". $_POST['id']."";
     }
         
     if ($mysqli->query($sql) == TRUE)
-    {echo "<script> 
-     document.location='index.php?page=periksa';
-     </script>";}
+    { echo "<script> 
+        document.location='index.php?page=periksa';
+        </script>";}
     else
     {echo "Error: " . $sql . "<br>" . $mysqli->error;}
     $mysqli->close();
 }
-?>

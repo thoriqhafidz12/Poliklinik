@@ -85,8 +85,8 @@ if(!isset($_SESSION["username"])){
     </form>
 
     <!-- TABLE -->
-    <div class="table-responsive">
-        <table class="table">
+    <div class="table-responsive my-4">
+        <table class="table"  id="myTable">
             <thead>
                 <tr>
                 <th scope="col">No</th>
@@ -117,11 +117,13 @@ if(!isset($_SESSION["username"])){
                     <td><?php echo $data['catatan'] ?></td>
                     <td>
                         <?php if ($data['biaya_periksa'] == null){?>
-                        <a class="btn btn-danger rounded-pill px-3" 
-                        href="index.php?page=transaksi&id=<?php echo $data['id'] ?>">Detail</a>
+                        <a class="btn btn-warning rounded-pill px-3" 
+                        href="index.php?page=dataObat&id=<?php echo $data['id'] ?>">Tambah</a>
                         <?php
                         } else{
-                        echo 'Rp. '.$data['biaya_periksa'];
+                        echo 'Rp. '.number_format($data['biaya_periksa'],2,',','.');
+                        echo '<br> <a class="btn btn-info rounded-pill px-3" 
+                        href="index.php?page=detail&id='.$data['id'].'">Detail</a>';
                         } 
                         ?>
                     </td>

@@ -47,8 +47,8 @@ if(!isset($_SESSION["username"])){
 </form>
 
 <!-- Table-->
-<div class="table-responsive">
-    <table class="table table-hover">
+<div class="table-responsive my-4">
+    <table class="table table-responsive" id="myTable">
         <!--thead atau baris judul-->
         <thead>
             <tr>
@@ -74,7 +74,7 @@ if(!isset($_SESSION["username"])){
                     <th scope="row"><?php echo $no++ ?></th>
                     <td><?php echo $data['nama_obat'] ?></td>
                     <td><?php echo $data['kemasan'] ?></td>
-                    <td><?php echo $data['harga'] ?></td>
+                    <td><?php echo "Rp. " .number_format($data['harga'],2,',','.')?></td>
                     <td>
                         <a class="btn btn-success rounded-pill px-3" 
                         href="index.php?page=obat&id=<?php echo $data['id'] ?>">Ubah
