@@ -18,6 +18,7 @@ if(!isset($_SESSION["username"])){
             $id_dokter = '';
             $tgl_periksa = '';
             $catatan = '';
+            $biaya_periksa = '';
             if (isset($_GET['id'])) {
                 $ambil = mysqli_query($mysqli, 
                 "SELECT * FROM periksa 
@@ -27,6 +28,7 @@ if(!isset($_SESSION["username"])){
                     $id_dokter = $row['id_dokter'];
                     $tgl_periksa = $row['tgl_periksa'];
                     $catatan = $row['catatan'];
+                    $biaya_periksa = $row['biaya_periksa'];
                 }
             ?>
                 <input type=hidden name="id" value="<?php echo
@@ -80,6 +82,7 @@ if(!isset($_SESSION["username"])){
        
        <label class="fw-bold">Catatan</label>
        <input type="text" class="form-control my-2" name="catatan"  value="<?php echo $catatan ?>"> 
+       <input type="text" class="form-control my-2" name="biaya_periksa"  value="<?php echo $biaya_periksa ?>" hidden> 
 
        <button class="btn btn-primary" type="submit" name="simpan" >Submit</button>
     </form>
@@ -150,10 +153,11 @@ if (isset($_POST['simpan'])) {
     $id_dokter = $_POST['id_dokter'];
     $tgl_periksa = $_POST['tgl_periksa'];
     $catatan = $_POST['catatan'];
+    $biaya_periksa = $_POST['biaya_periksa'];
     if (isset($_POST['id'])) {
         $sql = "UPDATE periksa SET id_pasien='$id_pasien',id_dokter='$id_dokter',tgl_periksa='$tgl_periksa',catatan = '$catatan' WHERE id = ". $_POST['id']."";
     } else {
-        $sql = "INSERT INTO periksa (id_pasien,id_dokter,tgl_periksa,catatan) VALUES ('$id_pasien','$id_dokter','$tgl_periksa','$catatan')";
+        $sql = "INSERT INTO periksa (id_pasien,id_dokter,tgl_periksa,catatan,biaya_periksa) VALUES ('$id_pasien','$id_dokter','$tgl_periksa','$catatan','$biaya_periksa)";
     }
         
     if ($mysqli->query($sql) == TRUE)
@@ -167,7 +171,7 @@ if (isset($_POST['simpan'])) {
 
 if (isset($_GET['aksi'])) {
     if ($_GET['aksi'] == 'hapus') {
-        $hapus = mysqli_query($mysqli, "DELETE FROM periksa WHERE id = '" . $_GET['id'] . "'");
+        $hapus = mysqli_query($mysqli, "DELETE FROM detail_periksa WHERE id_periksa = '" . $_GET['id'] . "'") && mysqli_query($mysqli, "DELETE FROM periksa WHERE id = '" . $_GET['id'] . "'") ;
     }
 
     echo "<script> 

@@ -19,10 +19,10 @@ if(!isset($_SESSION["username"])){
                 $no = 1;
                 while ($data = mysqli_fetch_array($result)) {
                 ?>
-                    <tr><td><?php echo $data['nama_pasien'] ?></td></tr>
-                    <tr><td><?php echo $data['nama_dokter'] ?></td></tr>
-                    <tr><td><?php echo date('d-M-Y H:i:s', strtotime ($data['tgl_periksa']))  ?></td></tr>
-                    <tr><td><?php echo $data['catatan'] ?></td></tr>
+                    <tr><td><?php echo "Pasien : ".$data['nama_pasien'] ?></td></tr>
+                    <tr><td><?php echo "Dokter : ".$data['nama_dokter'] ?></td></tr>
+                    <tr><td><?php echo "Tanggal Periksa : ".date('d-M-Y H:i:s', strtotime ($data['tgl_periksa']))  ?></td></tr>
+                    <tr><td><?php echo "Catatan : ".$data['catatan'] ?></td></tr>
                     <tr><td class="bg-success bg-gradient">Biaya Periksa | Rp <?= number_format($data['biaya_periksa'],2,',','.'); ?></td></tr>
                 <?php
                 }
